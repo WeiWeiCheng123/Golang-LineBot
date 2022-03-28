@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
+	//"strconv"
 
 	"github.com/WeiWeiCheng123/Golang-LineBot/lib/config"
 	"github.com/gin-gonic/gin"
@@ -28,6 +28,8 @@ func main() {
 
 func callbackHandler(c *gin.Context) {
 	fmt.Println("Hello ", c.Request)
+
+	/*
 	events, err := bot.ParseRequest(c.Request)
 	fmt.Println("env= ", events)
 	fmt.Println("err= ", err)
@@ -70,4 +72,5 @@ func callbackHandler(c *gin.Context) {
 			}
 		}
 	}
+	*/
 }
