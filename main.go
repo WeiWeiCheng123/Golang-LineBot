@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"strconv"
 
 	"github.com/WeiWeiCheng123/Golang-LineBot/lib/config"
+	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
@@ -17,22 +17,23 @@ var bot *linebot.Client
 func main() {
 	bot, err := linebot.New(config.GetStr("TOKEN"), config.GetStr("SECRET"))
 	log.Println("Bot:", bot, " err:", err)
-	http.HandleFunc("/callback", callbackHandler)
+	router := gin.New()
+	router.POST("/callback", callbackHandler)
 	port := os.Getenv("PORT")
 	fmt.Println("port= ", port)
-	addr := fmt.Sprintf(":%s", port)
-	http.ListenAndServe(addr, nil)
+	//addr := fmt.Sprintf(":%s", port)
+	router.Run(":" + port)
 }
 
-func callbackHandler(w http.ResponseWriter, r *http.Request) {
-	events, err := bot.ParseRequest(r)
+func callbackHandler(c *gin.Context) {
+	events, err := bot.ParseRequest(c.Request)
 	fmt.Println("env= ", events)
 	fmt.Println("err= ", err)
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
-			w.WriteHeader(400)
+			c.String(400, "")
 		} else {
-			w.WriteHeader(500)
+			c.String(500, "")
 		}
 		return
 	}
