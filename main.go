@@ -6,17 +6,15 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/WeiWeiCheng123/Golang-LineBot/lib/config"
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
 var bot *linebot.Client
-var token string
-var secret string
 
 func main() {
-	token = "J6bbUTM7oYuS90LFq8wl3zJJEb46aPMEHI2W7pnvl9rFxK/lkts0wwe6CsHIw41wM5oG8z+SOtZq0B0aB01BuN2oOIl8HfPD28y/l/1nZg4s7jvLHJHPtXnDHjBdnyLly6Gjvv965Q+X2mou0r/PggdB04t89/1O/w1cDnyilFU="
-	secret = "701d115eea8075888df5c048afe2f0ec"
-	bot, err := linebot.New(secret, token)
+	bot, err := linebot.New(config.GetStr("TOKEN"), config.GetStr("SECRET"))
 	fmt.Println(bot, " ", err)
 	http.HandleFunc("/callback", callbackHandler)
 	port := 8080
