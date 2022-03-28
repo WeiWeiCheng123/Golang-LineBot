@@ -17,6 +17,8 @@ var bot *linebot.Client
 func main() {
 	secret := config.GetStr("SECRET")
 	token := config.GetStr("TOKEN")
+	fmt.Println(secret)
+	fmt.Println(token)
 	bot, err := linebot.New(secret, token)
 	log.Println("Bot:", bot, " err:", err)
 	router := gin.Default()
