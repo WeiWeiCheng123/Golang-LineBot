@@ -15,8 +15,8 @@ import (
 var bot *linebot.Client
 
 func main() {
-	secret := config.GetStr("SECRET")
-	token := config.GetStr("TOKEN")
+	secret := os.Getenv("SECRET")
+	token := os.Getenv("TOKEN")
 	fmt.Println(secret)
 	fmt.Println(token)
 	bot, err := linebot.New(secret, token)
