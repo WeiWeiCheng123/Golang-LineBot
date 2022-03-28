@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+
 	//"strconv"
 
 	"github.com/WeiWeiCheng123/Golang-LineBot/lib/config"
@@ -31,48 +32,49 @@ func callbackHandler(c *gin.Context) {
 	events, err := bot.ParseRequest(c.Request)
 	fmt.Println("env= ", events)
 	fmt.Println("err= ", err)
+	c.String(200, "end")
 	/*
-	events, err := bot.ParseRequest(c.Request)
-	fmt.Println("env= ", events)
-	fmt.Println("err= ", err)
-	if err != nil {
-		if err == linebot.ErrInvalidSignature {
-			c.String(400, "123")
-		} else {
-			c.String(500, "456")
+		events, err := bot.ParseRequest(c.Request)
+		fmt.Println("env= ", events)
+		fmt.Println("err= ", err)
+		if err != nil {
+			if err == linebot.ErrInvalidSignature {
+				c.String(400, "123")
+			} else {
+				c.String(500, "456")
+			}
+			return
 		}
-		return
-	}
 
-	for _, event := range events {
-		if event.Type == linebot.EventTypeMessage {
-			switch message := event.Message.(type) {
-			// Handle only on text message
-			case *linebot.TextMessage:
-				// GetMessageQuota: Get how many remain free tier push message quota you still have this month. (maximum 500)
-				quota, err := bot.GetMessageQuota().Do()
-				if err != nil {
-					log.Println("Quota err:", err)
-				}
-				// message.ID: Msg unique ID
-				// message.Text: Msg text
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("msg ID:"+message.ID+":"+"Get:"+message.Text+" , \n OK! remain message:"+strconv.FormatInt(quota.Value, 10))).Do(); err != nil {
-					log.Print(err)
-				}
+		for _, event := range events {
+			if event.Type == linebot.EventTypeMessage {
+				switch message := event.Message.(type) {
+				// Handle only on text message
+				case *linebot.TextMessage:
+					// GetMessageQuota: Get how many remain free tier push message quota you still have this month. (maximum 500)
+					quota, err := bot.GetMessageQuota().Do()
+					if err != nil {
+						log.Println("Quota err:", err)
+					}
+					// message.ID: Msg unique ID
+					// message.Text: Msg text
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("msg ID:"+message.ID+":"+"Get:"+message.Text+" , \n OK! remain message:"+strconv.FormatInt(quota.Value, 10))).Do(); err != nil {
+						log.Print(err)
+					}
 
-			// Handle only on Sticker message
-			case *linebot.StickerMessage:
-				var kw string
-				for _, k := range message.Keywords {
-					kw = kw + "," + k
-				}
+				// Handle only on Sticker message
+				case *linebot.StickerMessage:
+					var kw string
+					for _, k := range message.Keywords {
+						kw = kw + "," + k
+					}
 
-				outStickerResult := fmt.Sprintf("收到貼圖訊息: %s, pkg: %s kw: %s  text: %s", message.StickerID, message.PackageID, kw, message.Text)
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(outStickerResult)).Do(); err != nil {
-					log.Print(err)
+					outStickerResult := fmt.Sprintf("收到貼圖訊息: %s, pkg: %s kw: %s  text: %s", message.StickerID, message.PackageID, kw, message.Text)
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(outStickerResult)).Do(); err != nil {
+						log.Print(err)
+					}
 				}
 			}
 		}
-	}
 	*/
 }
