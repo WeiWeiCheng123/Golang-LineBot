@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/WeiWeiCheng123/Golang-LineBot/lib/config"
@@ -17,8 +18,9 @@ func main() {
 	bot, err := linebot.New(config.GetStr("TOKEN"), config.GetStr("SECRET"))
 	fmt.Println(bot, " ", err)
 	http.HandleFunc("/callback", callbackHandler)
-	//port := 80
-	addr := "147.92.150.195"
+	port := os.Getenv("PORT")
+	fmt.Println(port)
+	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
 }
 
