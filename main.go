@@ -17,9 +17,9 @@ func main() {
 	bot, err := linebot.New(config.GetStr("TOKEN"), config.GetStr("SECRET"))
 	fmt.Println(bot, " ", err)
 	http.HandleFunc("/callback", callbackHandler)
-	port := 8080
-	addr := fmt.Sprintf(":%s", port)
-	http.ListenAndServe(addr, nil)
+	//port := 8080
+	//addr := fmt.Sprintf(":%s", port)
+	//http.ListenAndServe(addr, nil)
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
