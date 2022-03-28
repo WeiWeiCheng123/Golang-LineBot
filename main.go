@@ -1,9 +1,15 @@
 package main
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 
@@ -30,11 +36,7 @@ func main() {
 }
 
 func callbackHandler(c *gin.Context) {
-	fmt.Println(c.Request.Body)
-	body, err := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("body ", body)
-	fmt.Println(bot.ParseRequest(c.Request))
-	events, err := bot.ParseRequest(c.Request)
+	events, err := ParseRequest1(c.Request)
 	fmt.Println("env= ", events)
 	fmt.Println("err= ", err)
 	if err != nil {
@@ -76,4 +78,46 @@ func callbackHandler(c *gin.Context) {
 			}
 		}
 	}
+}
+
+func ParseRequest1(r *http.Request) ([]*linebot.Event, error) {
+	return ParseRequest(os.Getenv("SECRET"), r)
+}
+
+func ParseRequest(channelSecret string, r *http.Request) ([]*linebot.Event, error) {
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println("1")
+		return nil, err
+	}
+	if !validateSignature(channelSecret, r.Header.Get("X-Line-Signature"), body) {
+		fmt.Println("2")
+		return nil, errors.New("ErrInvalidSignature")
+	}
+
+	request := &struct {
+		Events []*linebot.Event `json:"events"`
+	}{}
+	if err = json.Unmarshal(body, request); err != nil {
+		fmt.Println("3")
+		return nil, err
+	}
+	fmt.Println("done")
+	return request.Events, nil
+}
+
+func validateSignature(channelSecret, signature string, body []byte) bool {
+	decoded, err := base64.StdEncoding.DecodeString(signature)
+	if err != nil {
+		return false
+	}
+	hash := hmac.New(sha256.New, []byte(channelSecret))
+
+	_, err = hash.Write(body)
+	if err != nil {
+		return false
+	}
+
+	return hmac.Equal(decoded, hash.Sum(nil))
 }
