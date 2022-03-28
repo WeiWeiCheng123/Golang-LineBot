@@ -19,7 +19,7 @@ func main() {
 	fmt.Println(bot, " ", err)
 	http.HandleFunc("/callback", callbackHandler)
 	port := os.Getenv("PORT")
-	fmt.Println(port)
+	fmt.Println("port= ", port)
 	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
 }
