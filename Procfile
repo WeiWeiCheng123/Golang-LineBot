@@ -1,1 +1,1 @@
-web: bin/Golang-LineBot
+web: Golang-LineBot

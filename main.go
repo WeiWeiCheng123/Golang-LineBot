@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/WeiWeiCheng123/Golang-LineBot/lib/config"
 	_ "github.com/joho/godotenv/autoload"
@@ -17,19 +16,12 @@ var bot *linebot.Client
 
 func main() {
 	bot, err := linebot.New(config.GetStr("TOKEN"), config.GetStr("SECRET"))
-	fmt.Println(bot, " ", err)
+	log.Println("Bot:", bot, " err:", err)
 	http.HandleFunc("/callback", callbackHandler)
 	port := os.Getenv("PORT")
 	fmt.Println("port= ", port)
 	addr := fmt.Sprintf(":%s", port)
-	s := &http.Server{
-		Addr:         addr,
-		ReadTimeout:  60 * time.Second,
-		WriteTimeout: 100 * time.Second,
-		IdleTimeout:  1200 * time.Second,
-	}
-	err = s.ListenAndServe()
-	//http.ListenAndServe(addr, nil)
+	http.ListenAndServe(addr, nil)
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
