@@ -31,9 +31,9 @@ func callbackHandler(c *gin.Context) {
 	fmt.Println("err= ", err)
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
-			c.String(400, "")
+			c.String(400, "123")
 		} else {
-			c.String(500, "")
+			c.String(500, "456")
 		}
 		return
 	}
