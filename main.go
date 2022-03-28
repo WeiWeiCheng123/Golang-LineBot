@@ -29,9 +29,8 @@ func main() {
 }
 
 func callbackHandler(c *gin.Context) {
+	fmt.Println(bot.GetBotInfo())
 	events, err := bot.ParseRequest(c.Request)
-	fmt.Println("env= ", events)
-	fmt.Println("err= ", err)
 	fmt.Println("env= ", events)
 	fmt.Println("err= ", err)
 	if err != nil {
