@@ -26,7 +26,8 @@ func main() {
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	events, err := bot.ParseRequest(r)
-
+	fmt.Println("env= ", events)
+	fmt.Println("err= ", err)
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			w.WriteHeader(400)
