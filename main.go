@@ -6,7 +6,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/WeiWeiCheng123/Golang-LineBot/lib/config"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
