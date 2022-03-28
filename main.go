@@ -47,6 +47,9 @@ func callbackHandler(c *gin.Context) {
 		}
 		return
 	}
+	for _, event := range events {
+		fmt.Println("event= ", event)
+	}
 
 	for _, event := range events {
 		if event.Type == linebot.EventTypeMessage {
