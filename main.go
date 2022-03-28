@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
@@ -30,6 +31,8 @@ func main() {
 
 func callbackHandler(c *gin.Context) {
 	fmt.Println(c.Request.Body)
+	body, err := ioutil.ReadAll(c.Request.Body)
+	fmt.Println("body ", body)
 	fmt.Println(bot.ParseRequest(c.Request))
 	events, err := bot.ParseRequest(c.Request)
 	fmt.Println("env= ", events)
