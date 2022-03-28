@@ -15,7 +15,9 @@ import (
 var bot *linebot.Client
 
 func main() {
-	bot, err := linebot.New(config.GetStr("SECRET"), config.GetStr("TOKEN"))
+	secret := config.GetStr("SECRET")
+	token := config.GetStr("TOKEN")
+	bot, err := linebot.New(secret, token)
 	log.Println("Bot:", bot, " err:", err)
 	router := gin.Default()
 	router.POST("/callback", callbackHandler)
