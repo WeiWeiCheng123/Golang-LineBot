@@ -18,7 +18,7 @@ func main() {
 	fmt.Println(bot, " ", err)
 	http.HandleFunc("/callback", callbackHandler)
 	port := 8080
-	addr := fmt.Sprintf("port:%s", port)
+	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
 }
 
