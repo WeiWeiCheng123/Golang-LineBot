@@ -23,15 +23,16 @@ var bot *linebot.Client
 func main() {
 	secret := os.Getenv("SECRET")
 	token := os.Getenv("TOKEN")
-	fmt.Println(secret)
-	fmt.Println(token)
+	port := os.Getenv("PORT")
+	fmt.Println("secret", secret)
+	fmt.Println("token", token)
+	fmt.Println("port ", port)
+
 	bot, err := linebot.New(secret, token)
 	log.Println("Bot:", bot, " err:", err)
 	router := gin.Default()
 	router.POST("/callback", callbackHandler)
-	port := os.Getenv("PORT")
-	fmt.Println("port= ", port)
-	//addr := fmt.Sprintf(":%s", port)
+
 	router.Run(":" + port)
 }
 
