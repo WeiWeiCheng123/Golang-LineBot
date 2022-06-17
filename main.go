@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
@@ -34,7 +36,9 @@ func main() {
 		x, _ := ioutil.ReadAll(c.Request.Body)
 		fmt.Println(x)
 		d, _ := base64.StdEncoding.DecodeString(c.Request.Header.Get("X-Line-Signature"))
-		fmt.Println("sec = ", d)
+		hash := hmac.New(sha256.New, []byte(secret))
+		fmt.Println(hmac.Equal(d, hash.Sum(nil)))
+
 		c.String(200, "Hello")
 	})
 
