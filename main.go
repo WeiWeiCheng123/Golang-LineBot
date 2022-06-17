@@ -55,7 +55,7 @@ func callbackHandler(c *gin.Context) {
 	for _, event := range events {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
-			// Handle only on text message
+			// Handle only on text message1
 			case *linebot.TextMessage:
 				quota, err := bot.GetMessageQuota().Do()
 				if err != nil {
