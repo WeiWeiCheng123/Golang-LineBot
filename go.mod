@@ -1,5 +1,6 @@
 module github.com/WeiWeiCheng123/Golang-LineBot
 
+// +heroku goVersion go1.17
 go 1.17
 
 require (
