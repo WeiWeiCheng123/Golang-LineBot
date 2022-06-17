@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -20,9 +21,11 @@ func main() {
 	fmt.Println("port ", port)
 
 	bot, err := linebot.New(secret, token)
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Println("Bot:", bot, " err:", err)
 	router := gin.Default()
-	gin.SetMode(gin.ReleaseMode)
 
 	router.POST("/callback", callbackHandler)
 
@@ -30,14 +33,11 @@ func main() {
 }
 
 func callbackHandler(c *gin.Context) {
-	fmt.Println(c.Request)
 	events, err := bot.ParseRequest(c.Request)
-	fmt.Println("e", events, err)
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			c.String(400, "123")
-		} else {
-			c.String(500, "456")
+			log.Print(err)
 		}
 		return
 	}
