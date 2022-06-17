@@ -27,6 +27,10 @@ func main() {
 	fmt.Println("Bot:", bot, " err:", err)
 	router := gin.Default()
 
+	router.GET("/", func(c *gin.Context) {
+		c.String(400, "Hello")
+	})
+	
 	router.POST("/callback", callbackHandler)
 
 	router.Run(":" + port)
