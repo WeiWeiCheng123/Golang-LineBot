@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -27,10 +28,13 @@ func main() {
 	fmt.Println("Bot:", bot, " err:", err)
 	router := gin.Default()
 
-	router.GET("/", func(c *gin.Context) {
+	router.POST("/", func(c *gin.Context) {
+		fmt.Print(c.Request)
+		x, _ := ioutil.ReadAll(c.Request.Body)
+		fmt.Println(x)
 		c.String(400, "Hello")
 	})
-	
+
 	router.POST("/callback", callbackHandler)
 
 	router.Run(":" + port)
