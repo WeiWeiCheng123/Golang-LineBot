@@ -22,6 +22,8 @@ func main() {
 	bot, err := linebot.New(secret, token)
 	fmt.Println("Bot:", bot, " err:", err)
 	router := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+
 	router.POST("/callback", callbackHandler)
 
 	router.Run(":" + port)
