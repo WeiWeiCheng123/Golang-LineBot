@@ -29,10 +29,10 @@ func main() {
 	router := gin.Default()
 
 	router.POST("/", func(c *gin.Context) {
-		fmt.Print(c.Request)
+		fmt.Println(c.Request)
 		x, _ := ioutil.ReadAll(c.Request.Body)
 		fmt.Println(x)
-		c.String(400, "Hello")
+		c.String(200, "Hello")
 	})
 
 	router.POST("/callback", callbackHandler)
