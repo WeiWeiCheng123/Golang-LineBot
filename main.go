@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -32,6 +33,8 @@ func main() {
 		fmt.Println(c.Request)
 		x, _ := ioutil.ReadAll(c.Request.Body)
 		fmt.Println(x)
+		d, _ := base64.StdEncoding.DecodeString(c.Request.Header.Get("X-Line-Signature"))
+		fmt.Println("sec = ", d)
 		c.String(200, "Hello")
 	})
 
