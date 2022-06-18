@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -30,7 +31,12 @@ func main() {
 
 	router.POST("/", func(c *gin.Context) {
 		events, err := bot.ParseRequest(c.Request)
-		fmt.Println(events, err)
+		if err != nil {
+			log.Println(err)
+		}
+		// fmt.Println(events, err)
+		eve, _ := json.Marshal(events)
+		fmt.Println(string(eve))
 		c.String(200, "test parse req pass")
 	})
 
