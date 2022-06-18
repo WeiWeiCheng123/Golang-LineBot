@@ -1,11 +1,7 @@
 package main
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/base64"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -32,15 +28,9 @@ func main() {
 	router := gin.Default()
 
 	router.POST("/", func(c *gin.Context) {
-		fmt.Println(c.Request)
-		x, _ := ioutil.ReadAll(c.Request.Body)
-		fmt.Println(x)
-		d, _ := base64.StdEncoding.DecodeString(c.Request.Header.Get("X-Line-Signature"))
-		hash := hmac.New(sha256.New, []byte(secret))
-		hash.Write(x)
-		fmt.Println(hmac.Equal(d, hash.Sum(nil)))
-
-		c.String(200, "Hello")
+		events, err := bot.ParseRequest(c.Request)
+		fmt.Println(events, err)
+		c.String(200, "test parse req pass")
 	})
 
 	router.POST("/callback", callbackHandler)
