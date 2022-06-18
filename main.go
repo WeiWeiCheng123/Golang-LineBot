@@ -50,7 +50,6 @@ func callbackHandler(c *gin.Context) {
 		return
 	}
 	for _, event := range events {
-		fmt.Println("event= ", event)
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			// Handle only on text message
