@@ -13,7 +13,15 @@ import (
 
 var bot *linebot.Client
 
+type Person struct {
+	FirstName string
+	LastName  string
+	Age       int
+}
+
 func main() {
+	var p Person
+	fmt.Println(p)
 	secret := os.Getenv("SECRET")
 	token := os.Getenv("TOKEN")
 	port := os.Getenv("PORT")
@@ -35,7 +43,9 @@ func main() {
 		}
 		// fmt.Println(events, err)
 		eve, _ := json.Marshal(events)
+		fmt.Println(eve)
 		fmt.Println(string(eve))
+		fmt.Println(eve[0])
 		c.String(200, "test parse req pass")
 	})
 
@@ -45,9 +55,8 @@ func main() {
 }
 
 func callbackHandler(c *gin.Context) {
-	fmt.Println(c.Request)
 	events, err := bot.ParseRequest(c.Request)
-
+	fmt.Println(events)
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			c.String(400, err.Error())
@@ -55,9 +64,6 @@ func callbackHandler(c *gin.Context) {
 		}
 		return
 	}
-
-	fmt.Printf("%v+", events)
-
 	c.String(200, "success")
 }
 
