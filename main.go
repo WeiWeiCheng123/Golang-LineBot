@@ -47,6 +47,7 @@ func main() {
 func callbackHandler(c *gin.Context) {
 	fmt.Println(c.Request)
 	events, err := bot.ParseRequest(c.Request)
+
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			c.String(400, err.Error())
@@ -54,7 +55,8 @@ func callbackHandler(c *gin.Context) {
 		}
 		return
 	}
-	fmt.Println("%v+", events)
+
+	fmt.Printf("%v+", events)
 
 	c.String(200, "success")
 }
