@@ -37,15 +37,16 @@ func main() {
 	router := gin.Default()
 
 	router.POST("/", func(c *gin.Context) {
+		var e linebot.Event
 		events, err := bot.ParseRequest(c.Request)
 		if err != nil {
 			log.Println(err)
 		}
+		event, _ := json.Marshal(events)
 		// fmt.Println(events, err)
-		eve, _ := json.Marshal(events)
-		fmt.Println(eve)
-		fmt.Println(string(eve))
-		fmt.Println(eve[0])
+		json.Unmarshal(event, &e)
+		fmt.Println(e)
+
 		c.String(200, "test parse req pass")
 	})
 
