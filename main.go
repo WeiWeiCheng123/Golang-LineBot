@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
@@ -55,35 +54,19 @@ func callbackHandler(c *gin.Context) {
 		}
 		return
 	}
-	for _, event := range events {
-		if event.Type == linebot.EventTypeMessage {
-			switch message := event.Message.(type) {
-			// Handle only on text message
-			case *linebot.TextMessage:
-				// GetMessageQuota: Get how many remain free tier push message quota you still have this month. (maximum 500)
-				quota, err := bot.GetMessageQuota().Do()
-				if err != nil {
-					log.Println("Quota err:", err)
-				}
-				// message.ID: Msg unique ID
-				// message.Text: Msg text
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("msg ID:"+message.ID+":"+"Get:"+message.Text+" , \n OK! remain message:"+strconv.FormatInt(quota.Value, 10))).Do(); err != nil {
-					log.Print(err)
-				}
+	fmt.Println("%v+", events)
 
-			// Handle only on Sticker message
-			case *linebot.StickerMessage:
-				var kw string
-				for _, k := range message.Keywords {
-					kw = kw + "," + k
-				}
-
-				outStickerResult := fmt.Sprintf("收到貼圖訊息: %s, pkg: %s kw: %s  text: %s", message.StickerID, message.PackageID, kw, message.Text)
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(outStickerResult)).Do(); err != nil {
-					log.Print(err)
-				}
-			}
-		}
-	}
 	c.String(200, "success")
 }
+
+/*
+[{
+	"replyToken":"3e19e6a2de9e4d52912d387e85bfadaf",
+	"type":"message",
+	"mode":"active",
+	"timestamp":1655557543382,
+	"source":{"type":"user","userId":"Ua4712856c697d2d1e02d02c33343f3ea"},
+	"message":{"id":"16283810978053","type":"sticker","packageId":"5788726","stickerId":"123222087","stickerResourceType":"STATIC","keywords":["Straight face"]},
+	"webhookEventId":"01G5VEPNS365JCNW2XYNQ036ZJ","deliveryContext":{"isRedelivery":false}
+}]
+*/
