@@ -1,10 +1,11 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"unsafe"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
@@ -34,10 +35,12 @@ func main() {
 			log.Println(err)
 		}
 		fmt.Println("event", events)
-		data := (*[]byte)(unsafe.Pointer(&events))
-		fmt.Println("data is : ", data)
-		data1 := *(*[]byte)(unsafe.Pointer(&events))
-		fmt.Println("data1 is : ", data1)
+		var buf bytes.Buffer
+		err = json.NewEncoder(&buf).Encode(events)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("buf", buf)
 		c.String(200, "test parse req pass")
 	})
 
