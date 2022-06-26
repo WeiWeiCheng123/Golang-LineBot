@@ -34,9 +34,10 @@ func main() {
 			log.Println(err)
 		}
 		fmt.Println("event", events)
-		data := *(*[]byte)(unsafe.Pointer(&events))
-		fmt.Println("[]byte is : ", data)
-
+		data := (*[]byte)(unsafe.Pointer(&events))
+		fmt.Println("data is : ", data)
+		data1 := *(*[]byte)(unsafe.Pointer(&events))
+		fmt.Println("data1 is : ", data1)
 		c.String(200, "test parse req pass")
 	})
 
