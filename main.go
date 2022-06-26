@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -13,15 +12,7 @@ import (
 
 var bot *linebot.Client
 
-type Person struct {
-	FirstName string
-	LastName  string
-	Age       int
-}
-
 func main() {
-	var p Person
-	fmt.Println(p)
 	secret := os.Getenv("SECRET")
 	token := os.Getenv("TOKEN")
 	port := os.Getenv("PORT")
@@ -37,16 +28,13 @@ func main() {
 	router := gin.Default()
 
 	router.POST("/", func(c *gin.Context) {
-		var e linebot.Event
 		events, err := bot.ParseRequest(c.Request)
 		if err != nil {
 			log.Println(err)
 		}
-		event, _ := json.Marshal(events)
-		// fmt.Println(events, err)
-		json.Unmarshal(event, &e)
-		fmt.Println(e)
-
+		fmt.Println("event", events)
+		ep := &events
+		fmt.Println("test ep", ep)
 		c.String(200, "test parse req pass")
 	})
 
