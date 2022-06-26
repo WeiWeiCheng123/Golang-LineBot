@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"unsafe"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
@@ -33,8 +34,9 @@ func main() {
 			log.Println(err)
 		}
 		fmt.Println("event", events)
-		ep := &events
-		fmt.Println("test ep", ep)
+		data := *(*[]byte)(unsafe.Pointer(&events))
+		fmt.Println("[]byte is : ", data)
+
 		c.String(200, "test parse req pass")
 	})
 
