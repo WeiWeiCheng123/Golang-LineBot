@@ -1,15 +1,13 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/line/line-bot-sdk-go/v7/linebot"
+	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 var bot *linebot.Client
@@ -29,21 +27,6 @@ func main() {
 	fmt.Println("Bot:", bot, " err:", err)
 	router := gin.Default()
 
-	router.POST("/", func(c *gin.Context) {
-		events, err := bot.ParseRequest(c.Request)
-		if err != nil {
-			log.Println(err)
-		}
-		fmt.Println("event", events)
-		var buf bytes.Buffer
-		err = json.NewEncoder(&buf).Encode(events)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println("buf", buf)
-		c.String(200, "test parse req pass")
-	})
-
 	router.POST("/callback", callbackHandler)
 
 	router.Run(":" + port)
@@ -51,7 +34,7 @@ func main() {
 
 func callbackHandler(c *gin.Context) {
 	events, err := bot.ParseRequest(c.Request)
-	fmt.Println(events)
+
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			c.String(400, err.Error())
@@ -59,17 +42,10 @@ func callbackHandler(c *gin.Context) {
 		}
 		return
 	}
+
+	for _, event := range events {
+		fmt.Println(event)
+	}
+
 	c.String(200, "success")
 }
-
-/*
-[{
-	"replyToken":"3e19e6a2de9e4d52912d387e85bfadaf",
-	"type":"message",
-	"mode":"active",
-	"timestamp":1655557543382,
-	"source":{"type":"user","userId":"Ua4712856c697d2d1e02d02c33343f3ea"},
-	"message":{"id":"16283810978053","type":"sticker","packageId":"5788726","stickerId":"123222087","stickerResourceType":"STATIC","keywords":["Straight face"]},
-	"webhookEventId":"01G5VEPNS365JCNW2XYNQ036ZJ","deliveryContext":{"isRedelivery":false}
-}]
-*/
