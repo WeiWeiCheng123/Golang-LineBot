@@ -10,7 +10,7 @@ import (
 func Send_Daily_message() {
 	c := cron.New()
 
-	c.AddFunc("*/1 * * * *",
+	c.AddFunc("* 15 * * *",
 		func() {
 			fmt.Println("Hi")
 			fmt.Println(time.Now())
