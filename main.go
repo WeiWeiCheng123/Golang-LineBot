@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 	"net/http"
+	"os"
+	"strconv"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
@@ -23,10 +24,10 @@ func main() {
 
 	fmt.Println("Bot:", bot, " err:", err)
 	http.HandleFunc("/callback", callbackHandler)
-	http.ListenAndServe(":" + port, nil)
+	http.ListenAndServe(":"+port, nil)
 }
 
-func callbackHandler(w http.ResponseWriter, r* http.Request) {
+func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	events, err := bot.ParseRequest(r)
 
 	if err != nil {
@@ -69,5 +70,6 @@ func callbackHandler(w http.ResponseWriter, r* http.Request) {
 					log.Print(err)
 				}
 			}
+		}
 	}
 }
