@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/WeiWeiCheng123/Golang-LineBot/lib/cron"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
@@ -14,8 +15,17 @@ var bot *linebot.Client
 
 func main() {
 	var err error
+
+	// linebot setup
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
-	log.Println("Bot:", bot, " err:", err)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	// cron job	
+	cron.Send_Daily_message()
+
+	// server setup
 	http.HandleFunc("/callback", callbackHandler)
 	port := os.Getenv("PORT")
 	fmt.Println(port)
@@ -24,9 +34,8 @@ func main() {
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
+	// get line message structure
 	events, err := bot.ParseRequest(r)
-
-	fmt.Println(events)
 
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
