@@ -42,7 +42,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, event := range events {
-		fmt.Println("event", event)
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			// Handle only on text message
