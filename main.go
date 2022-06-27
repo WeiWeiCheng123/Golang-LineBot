@@ -28,8 +28,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			w.WriteHeader(400)
+			log.Println(err)
 		} else {
 			w.WriteHeader(500)
+			log.Println(err)
 		}
 		return
 	}
