@@ -7,24 +7,19 @@ import (
 	"os"
 	"strconv"
 
-	_ "github.com/joho/godotenv/autoload"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
 var bot *linebot.Client
 
 func main() {
-	secret := os.Getenv("SECRET")
-	token := os.Getenv("TOKEN")
-	port := os.Getenv("PORT")
-	bot, err := linebot.New(secret, token)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Bot:", bot, " err:", err)
+	var err error
+	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
+	log.Println("Bot:", bot, " err:", err)
 	http.HandleFunc("/callback", callbackHandler)
-	http.ListenAndServe(":"+port, nil)
+	port := "8087"
+	addr := fmt.Sprintf(":%s", port)
+	http.ListenAndServe(addr, nil)
 }
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,10 +28,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			w.WriteHeader(400)
-			log.Print(err)
 		} else {
 			w.WriteHeader(500)
-			log.Print(err)
 		}
 		return
 	}
